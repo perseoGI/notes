@@ -256,6 +256,8 @@ layer
          => every RUN step will create a different docker layer
     - EXPOSE <port> <port> ... => expose these ports on the docker virtual network you still need to use -p or -P to open/forward these ports on host
     - CMD ["commands", "more commands"] => required: run this command when container is launched (only one CMD allowed, so if there are multiple, last one wins)
+    - WORKDIR <dir> => change working directory, preferred to 'RUN cd <path>'
+    - COPY <src> <dst> => copy files from local machine into container
 
 Good practices:
 
