@@ -1,3 +1,4 @@
+
 # Docker and Kubernetes
 
 
@@ -9,38 +10,34 @@ Landscape with a map of all technology stack: https://landscape.cncf.io/?zoom=12
 Docker CE: community edition
 Docker EE: enterprise edition (support + extra features)
 
+- [Inmutable infraestructure](https://www.oreilly.com/radar/an-introduction-to-immutable-infrastructure/)
+- [The 12 factors](https://12factor.net/)
 
-## Commands
+## Miscellany
 
-- version
-- info
--
-
-## Image vs container
+### Image vs container
 
 Image: app we want to run
 Container: instance of that image running as a process
 
 Many containers can be running off the same image
 
-## Image registry
+### Image registry
 
 Like GitHub for source code, most important: Docker Hub
 
-
-## Container vs VM
+### Container vs VM
 
 Containers are not mini VM's, they are just process
 
 Try do a docker container ps to see the process id of a container
-Then, try a ps aux | grep <name> and this process will be available and seeable outside
+Then, try `ps aux | grep <name>` and this process will be available and seeable outside
 
 They are just process running on the host
 
-
 ## Container
 
-### run
+#### *run*
 
     docker container run --publish 80:80 nginx [COMMANDS]
 
@@ -62,21 +59,22 @@ They are just process running on the host
     creating the network with docker network create foobar_net
 
 Process:
+
 1. Looks for image locally in image cache
 2. Looks in remote image repository (Docker Hub)
-3. Dowload latest version (nginx:latest)
+3. Download latest version (nginx:latest)
 4. Creates new container based on that image and prepares to start
 5. Gives a virtual IP on a private network inside docker engine
 6. Opens up a port 80 on host and forwards to port 80 in container
 7. Start container by using the CMD in the image Dockerfile
 
-### stop
+#### *stop*
 
 Stop a running container
 
     docker container stop <container>
 
-### start
+#### *start*
 
 Start an stopped container
 
@@ -84,7 +82,7 @@ Start an stopped container
 
 - ai: attach interactive
 
-### exec
+#### *exec*
 
 Execute a command on a container (for example, a terminal)
 
@@ -92,7 +90,7 @@ Execute a command on a container (for example, a terminal)
 
 Exec run an additional process so when exiting, container will still running
 
-### ls
+#### *ls*
 
 Show running containers
 
@@ -102,13 +100,13 @@ Show all containers
 
     docker container ls -a
 
-### logs
+#### *logs*
 
 Last logs of container
 
     docker container logs <container>
 
-### top, inspect, stats
+#### *top, inspect, stats*
 
 Get top execution result of a container
 
@@ -117,8 +115,7 @@ Get top execution result of a container
 Inspect: details of one container config
 Stats: performance stats for all containers
 
-
-### rm
+#### *rm*
 
 Remove containers
 
@@ -126,41 +123,25 @@ Remove containers
 
 - force to remove running containers
 
-
-## Image
-
-### pull
-
-Download an image
-
-    docker image pull <image_name>
-
-### ls
-
-List installed images
-
-    docker image ls
-
-## network
-
 ### Virtual networks
 
-Dockers are attached to a virtual network (docker0), which can access internet via NAT
-You can also create a private network for some dockers and make them interact with each other
+Dockers are attached to a virtual network (docker0), which can access internet
+via NAT You can also create a private network for some dockers and make them
+interact with each other.
 
 To view docker IP:
 
     docker container inspect --format '{{ .NetworkSettings.IPAddress }}' <docker>
 
 DNS resolution works by default when creating a bridge network
-- The default bridge network does NOT have DNS resolution, so you can pass --link when creating a container
+The default bridge network does NOT have DNS resolution, so you can pass --link
+when creating a container.
 
-### Network driver
+## Network driver
 
 Built-in or 3rd party extensions that give you virtual network features
 
-
-### ls
+#### *ls*
 
 Show all networks
 
@@ -170,13 +151,13 @@ Show all networks
 - host: special network that gains performance by skipping virtual network but sacrifices security of container model
 - none: removes eth0 and only leaves you with localhost interface in container
 
-### inspect
+#### *inspect*
 
 Show information of network such as containers attached to it
 
     docker network inspect <network>
 
-### Connect
+#### *connect*
 
 When container is not running (use container run --network <network>)
 
@@ -191,10 +172,24 @@ This command will not disconnect previous network container were attached, it wi
 
 - Create apps so frontend/backend si on same Docker network
 - Their inter-communication never leaves host
-- All externally exposed pors closed by default
+- All externally exposed ports closed by default
 - Manually expose ports via -p
-- Never rely on IP addresses (use DNS naming) => always creates custom networks (which have enabled DNS resolution by default) (docker compose will simplify this)
+- Never rely on IP addresses (use DNS naming) => always creates custom networks
+(which have enabled DNS resolution by default) (docker compose will simplify
+this)
 
+### Container Lifetime & Persintent Data
+
+Containers are innmutable and ephemeral
+
+- Inmutable: only re-deploy containers, not change
+- Separation of concerns: unique data will be persistant on the layers until container is removed
+- Data volumes: outside container Unique FS
+- Bind Mounts: link container path to host path
+
+#### Data Volumes
+
+VOLUME:
 
 
 ## Image
@@ -211,7 +206,8 @@ This command will not disconnect previous network container were attached, it wi
 Make layers about changes
 Every layer gets a unique SHA
 
-Ex:
+Example:
+
 1. Start from ubuntu
 2. Install packages with apt
 3. Set environment variable
@@ -223,12 +219,12 @@ reuse that layer, saving time and space (cache) (knows how to match layers
 thanks to SHA)
 
 Custom image:
+
 1. Custom
 2. Install Apache
 3. Open port 80
 4. Copy website A | Copy website B  (this will create two images but only 5
    layers will be stored (1-3, 4 and 5)
-
 
 ### Copy On Write (COW)
 
@@ -259,32 +255,60 @@ layer
     - WORKDIR <dir> => change working directory, preferred to 'RUN cd <path>'
     - COPY <src> <dst> => copy files from local machine into container
 
-Good practices:
+#### Good practices
 
 - When a layer changes, all following layers need to be rebuilt
 - Always copy code or things to be changed at the very end
 - Split RUN commands when needed focussing on reusability
 
-#### history
+### Commands
+
+#### *pull*
+
+Download an image
+
+    docker image pull <image_name>
+
+#### *ls*
+
+List installed images
+
+    docker image ls
+
+#### *prune*
+
+Clean up dangling images
+
+#### *history*
 
 Show layers of changes made in image
 
     docker image history <image>
 
-#### inspect
+#### *inspect*
 
 Shows image metadata
 
     docker image inspect <image>
 
-#### tag
+#### *tag*
 
 Create a new tag for a given tag
 
     docker image tag <old-tag> <new-tag>
 
-#### build
+#### *build*
 
 Create an image from a Dockerfile file
 
     docker image build -t <image_name> .
+
+## System
+
+#### *prune*
+
+Clean up everything
+
+#### *df*
+
+Show docker filesystem usage
