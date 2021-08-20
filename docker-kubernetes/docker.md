@@ -183,14 +183,50 @@ this)
 Containers are innmutable and ephemeral
 
 - Inmutable: only re-deploy containers, not change
-- Separation of concerns: unique data will be persistant on the layers until container is removed
+- Separation of concerns: unique data will be persistent on the layers until container is removed
 - Data volumes: outside container Unique FS
 - Bind Mounts: link container path to host path
 
 #### Data Volumes
 
-VOLUME:
+    VOLUME <path_to_volume>
 
+To see it, under volume:
+
+    docker image inspect <image>
+
+Under Mounts/mountpoint (real host path):
+
+    docker container inspect <container>
+
+    docker volume ls
+    docker volume inspect <volume>
+
+##### Named volumes
+
+Name a container to use same persistent path over different containers
+
+    docker run ... -v <volume_name>:<path_inside_container> ...
+
+Eg:
+
+    docker container run -d --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=True -v mysql-db:/var/lib/mysql mysql
+
+To create a docker volume with an specific driver:
+
+    docker volume create -d <driver> -o <driver options> ...
+
+This is not quite common on local development
+
+#### Bind mounting
+
+- Maps a host file/dir to a container file/dir
+
+Command:
+
+    docker container run ... -v <host_path_starting_with_/>:<container_path> ...
+
+This will not create a volume but a link to existing file
 
 ## Image
 
