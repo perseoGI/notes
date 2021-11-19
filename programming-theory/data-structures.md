@@ -159,6 +159,28 @@ Finite set of vertices or nodes and set of edges connecting these vertices.
 - Size: number of edges
 - Adjacent nodes: connected by same edge
 - Isolated node: non connected to any other graph
+- Cycle: path where start and end node are the same
+- Simple path: nodes appear only once
+- Connected: exist a path between any two nodes
+- Component: connected parts of a graph
+- Tree: connected graph with n nodes and n-1 edges (only exist a unique path between any two nodes)
+- Directed graph: paths can be traversed only in one direction
+- Weighted graph: each edge of the graph has a value (distance or cost typically)
+- Neighbor of node: any node which is adjacent to the node (edge between them)
+- Degree of node: number of node neighbors
+
+- Sum of degrees in graph: 2m (m = number of edges)
+- Regular graph: degree of each node is a constant
+- Complete graph: degree of each node is n - 1 (n = number of nodes)
+
+Directed graph:
+- Indegree: number of edges which ends in the node
+- Outdegree: number of edges that start at the node
+
+- Coloring: assign each node a color so no adjacent nodes have same color
+- Bipartite graph: only two colors required to color the graph
+  - When not contain a cycle with an odd number of edges
+- Simple graph: there is no edges starting and ending in same node and any two nodes have more than one edge connecting each other
 
 - Types:
   - Directed Graph: all edges has a direction (start, end)
