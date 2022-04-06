@@ -242,6 +242,42 @@ Recursively search through all different ways a solution can be constructed.
 Pruning means to cancel a search when a partial solution cannot be extended to
 complete solution.
 
+#### Path with maximum gold
+
+```cpp
+class GoldMiner{
+    private:
+    int m, n, maximum = 0;
+    public:
+
+    int getMaximumGold(vector<vector<int>>& grid) {
+        m = grid.size();
+        n = grid[0].size();
+        for(int i = 0; i < m; ++i)
+            for(int j = 0; j < n; ++j)
+                if (grid[i][j] != 0)
+                    getMaximumGold(grid, i, j, 0);
+        return maximum;
+    }
+
+    void getMaximumGold(vector<vector<int>>& grid, int i, int j, int sum) {
+        // Dynamic programming recursive algorithm
+        maximum = max(maximum, sum);
+        if (i < m && i >= 0 && j < n && j >= 0 && grid[i][j] != 0 && grid[i][j] != -1){
+            sum += grid[i][j];
+            int tmp = grid[i][j];
+            grid[i][j] = -1;
+            getMaximumGold(grid, i+1, j, sum);
+            getMaximumGold(grid, i-1, j, sum);
+            getMaximumGold(grid, i, j+1, sum);
+            getMaximumGold(grid, i, j-1, sum);
+            grid[i][j] = tmp;
+        }
+    }
+}
+```
+
+
 ## Greedy algorithms
 
 Construct a solution by always making the best choice possible in each step
@@ -916,6 +952,61 @@ void dfs(int s, int parent){
 
 }
 ```
+
+## Strings
+
+### Trie
+
+```cpp
+class Trie {
+private:
+    static constexpr int N = 26; // lowercase english letters
+    struct Node {
+        Node *children[N];
+        //map<char, Node*> children;
+        bool isEnd = false;
+    };
+
+    Node *trie;
+
+public:
+    Trie() {
+        trie = new Node();
+    }
+
+    void insert(string word) {
+        Node *node = trie;
+        for (char c : word){
+            int i = c - 'a';
+            if(node->children[i] == nullptr)
+                node->children[i] = new Node();
+            node = node->children[i];
+        }
+        node->isEnd = true;
+    }
+
+    inline Node *_startsWith(const string &prefix){
+        Node *node = trie;
+        for (char c : prefix){
+            int i = c - 'a';
+            if(node->children[i] == nullptr)
+                return nullptr;
+            node = node->children[i];
+        }
+        return node;
+    }
+
+    bool search(const string &word) {
+        Node *node = _startsWith(word);
+        return (node && node->isEnd);
+    }
+
+    bool startsWith(string prefix) {
+        return _startsWith(prefix) != nullptr;
+    }
+};
+```
+
 
 ## Miscellanea
 
