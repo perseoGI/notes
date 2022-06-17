@@ -11,5 +11,6 @@ Variadic and generic lamdas
 - if constexpressions
 - Initialize variables inside if / switch
 - Nested namespace declaration (eg. namespace project::private::foo ...)
-- std::clamp 
+- std::clamp
 - __has_include(<library_name>)
+- std::size(<arr>)

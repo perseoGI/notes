@@ -42,3 +42,30 @@ v2::foo(); // v2 version
 
 Useful to keep API intact and allow using newer versions with v2::xxx
 Useful to push newer versions changing the inline namespace
+
+### Unscoped enums
+
+enum Color {
+
+   red,
+   green,
+   blue,
+};
+
+- Converted to int implicitly
+- Values added to global namespace (even you can do Color::red)
+- Name conflicts
+
+### Scoped enums
+
+enum class DayOfWeek{
+   monday,
+   tuesday,
+   wednesday
+   thursday,
+   friday,
+   sunday
+};
+
+- Not implicit conversions -> cant be printed as integer without a ostream << override
+- Local namespace -> avoid name conflicts
