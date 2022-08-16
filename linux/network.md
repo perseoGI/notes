@@ -4,7 +4,8 @@
 
 1. ip link: get interface name
 2. Create a file on /etc/systemd/network/<interface>.network
-  
+
+```  
 [Match]
 Name=<interface>
 
@@ -13,7 +14,8 @@ Address=<Desired ip>/24
 Gateway=192.168.1.1
 DNS=8.8.8.8
 DNS=8.8.4.4
-
+```
+  
 3. Ensure dhcpd service is off
 
 ```sh
